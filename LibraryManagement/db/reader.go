@@ -3,6 +3,8 @@ package db
 import (
 	"librarymanagement/logger"
 	"log/slog"
+
+	sq "github.com/Masterminds/squirrel"
 )
 
 type Reader struct {
@@ -79,4 +81,76 @@ func (r *ReaderRepo) RegisterUser(newReader *Reader) (*Reader, error) {
 
 	return &insertedReader, nil
 
+}
+
+func (r *ReaderRepo) GetUnapprovedUser() ([]*Reader, error) {
+
+	qry, args, err := GetQueryBuilder().Select("Name", "Email", "Password").
+		From("reader").
+		Where(sq.Eq{"Is_Active": false}).
+		ToSql()
+
+	if err != nil {
+		slog.Error(
+			"Failed to create Get Unapproved user query",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return nil, err
+	}
+
+	unapprovedReader := []*Reader{}
+	err = GetReadDB().Select(&unapprovedReader, qry, args...)
+	if err != nil {
+		slog.Error(
+			"Failed to Fetch upapproved user",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return nil, err
+	}
+
+	return unapprovedReader, nil
+
+}
+
+func (r *ReaderRepo) ApprovedReader(email string) error {
+
+	updateQry, args, err := GetQueryBuilder().Update(r.Table).
+		Set("Is_Active", true).
+		Where(sq.Eq{"Email": email}).
+		ToSql()
+	if err != nil {
+		slog.Error(
+			"Failed to create update of readers active status query",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": updateQry,
+				"args":  args,
+			}),
+		)
+		return err
+	}
+
+	// Execute the update query
+	_, err = GetReadDB().Exec(updateQry, args...)
+	if err != nil {
+		slog.Error(
+			"Failed to update of readers active status",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": updateQry,
+				"args":  args,
+			}),
+		)
+		return err
+	}
+
+	return nil
 }

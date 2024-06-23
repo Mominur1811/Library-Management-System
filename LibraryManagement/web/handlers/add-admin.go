@@ -38,6 +38,6 @@ func AddAdmin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.SendData(w, "", insAdmin)
+	utils.SendData(w, insAdmin)
 
 }

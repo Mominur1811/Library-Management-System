@@ -3,6 +3,8 @@ package db
 import (
 	"librarymanagement/logger"
 	"log/slog"
+
+	sq "github.com/Masterminds/squirrel"
 )
 
 type Admin struct {
@@ -42,15 +44,14 @@ func (r *AdminRepo) RegisterUser(newAdmin *Admin) (*Admin, error) {
 		Columns(columns...).
 		Suffix(`
 			RETURNING 
-			name,
-			password,
-			email
+			email,
+			password
 		`).
 		Values(values...).
 		ToSql()
 	if err != nil {
 		slog.Error(
-			"Failed to create new register query",
+			"Failed to create new admin register query",
 			logger.Extra(map[string]any{
 				"error": err.Error(),
 				"query": qry,
@@ -61,8 +62,8 @@ func (r *AdminRepo) RegisterUser(newAdmin *Admin) (*Admin, error) {
 	}
 
 	// Execute the SQL query and get the result
-	var insertedReader Reader
-	err = GetReadDB().QueryRow(qry, args...).Scan(&insertedReader.Name, &insertedReader.Password, &insertedReader.Email)
+	var insAdmin Admin
+	err = GetReadDB().QueryRow(qry, args...).Scan(&insAdmin.Password, &insAdmin.Email)
 	if err != nil {
 		slog.Error(
 			"Failed to execute insert query",
@@ -75,6 +76,38 @@ func (r *AdminRepo) RegisterUser(newAdmin *Admin) (*Admin, error) {
 		return nil, err
 	}
 
-	return &insertedReader, nil
+	return &insAdmin, nil
 
+}
+
+func (r *AdminRepo) DeleteAdmin(email string) error {
+
+	qry, args, err := GetQueryBuilder().Delete(r.Table).Where(sq.Eq{"email": email}).ToSql()
+	if err != nil {
+		slog.Error(
+			"Failed to create new admin delete query",
+			logger.Extra(map[string]interface{}{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return err
+	}
+
+	// Execute the DELETE query
+	_, err = GetReadDB().Exec(qry, args...)
+	if err != nil {
+		slog.Error(
+			"Failed to execute admin delete query",
+			logger.Extra(map[string]interface{}{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return err
+	}
+
+	return nil
 }

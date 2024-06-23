@@ -9,7 +9,7 @@ import (
 	"github.com/go-playground/validator"
 )
 
-var confFlag = flag.String("c", "/home/mominur/ecommerce-microservice-golang/product-service/config.json", "Configuration file path")
+var confFlag = flag.String("c", "/home/mominur/go prog/LibraryManagement/config.json", "Configuration file path")
 
 func LoadConfig() error {
 	flag.Parse()

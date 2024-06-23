@@ -5,4 +5,5 @@ func InitDB() {
 	InitQueryBuilder()
 	InitRedis()
 	InitReaderRepo()
+	InitBookRepo()
 }

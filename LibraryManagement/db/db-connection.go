@@ -22,6 +22,7 @@ func connect(DBConfig config.DB) *sqlx.DB {
 		DBConfig.SSLMode)
 
 	dbCon, err := sqlx.Connect("postgres", ConnStr)
+	fmt.Println(ConnStr)
 	if err != nil {
 		slog.Error(err.Error())
 		os.Exit(1)
@@ -38,10 +39,10 @@ func connect(DBConfig config.DB) *sqlx.DB {
 func ConnectDB() {
 	conf := config.GetConfig()
 
-	readDb = connect(conf.Db.Read)
+	readDb = connect(conf.Db)
 	slog.Info("Connected to read database")
 
-	writeDb = connect(conf.Db.Write)
+	writeDb = connect(conf.Db)
 	slog.Info("Connected to write database")
 }
 
