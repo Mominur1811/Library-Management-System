@@ -1,61 +1,7 @@
-/* Reset default margin and padding */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-}
-
-.container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px 0;
-}
-
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 0;
-}
-
-header h1 {
-    font-size: 24px;
-    margin-left: 20px;
-    display: inline-block;
-}
-
-nav {
-    float: right;
-    margin-right: 20px;
-}
-
-nav ul {
-    list-style-type: none;
-}
-
-nav ul li {
-    display: inline-block;
-    margin-left: 20px;
-}
-
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-nav ul li a:hover {
-    text-decoration: underline;
-}
-
 .search-section {
     background-color: #fff;
     padding: 20px;
-    margin-top: 20px;
+    margin-top: 80px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -100,8 +46,7 @@ nav ul li a:hover {
 }
 
 
-
-
+/* Card design CSS */
 .card-container {
     display: flex;
     flex-wrap: wrap;
@@ -109,32 +54,61 @@ nav ul li a:hover {
 }
 
 .book-card {
+    display: flex;
+    /* Ensure card is flex container */
     border: 1px solid #ccc;
-    border-radius: 25px;
+    border-radius: 15px;
+    /* Adjust border radius for a softer look */
     padding: 20px;
-    width: 800px;
-    margin-bottom: 5px;
+    width: 30%;
+    /* Adjust as needed */
     background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Add box shadow for depth */
 }
 
-.book-card .title {
+.book-image {
+    width: 120px;
+    /* Adjust image width */
+    height: auto;
+    /* Maintain aspect ratio */
+    margin-right: 20px;
+    /* Add spacing between image and details */
+    border-radius: 10px;
+    /* Rounded corners */
+    flex-shrink: 0;
+    /* Prevent image from shrinking */
+}
+
+.book-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    /* Take remaining space */
+}
+
+.book-details>* {
+    margin-bottom: 10px;
+    /* Add space between elements */
+}
+
+.title {
     color: green;
     font-size: 18px;
-    margin-bottom: 10px;
 }
 
-.book-card .author {
+.author {
     color: goldenrod;
     font-size: 14px;
-    margin-bottom: 10px;
 }
 
-.book-card .available-count {
+.available-count {
     font-size: 14px;
-    margin-bottom: 10px;
 }
 
 .borrow-button {
+    align-self: flex-end;
+    /* Align button to */
     padding: 8px 16px;
     background-color: green;
     color: white;

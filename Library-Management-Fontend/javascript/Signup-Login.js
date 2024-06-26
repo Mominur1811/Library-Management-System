@@ -36,8 +36,10 @@ function sendLoginData() {
         .then(response => {
             // Handle successful response
             console.log('Login successful:', response.data); // Log the successful response data
+            localStorage.setItem('jwt', response.data.data)
+            // console.log(localStorage.getItem('jwt'))
             alert('Login Data successful!'); // Alert the user
-            document.getElementById('Signup-form').reset(); // Clear the form
+            //  document.getElementById('Signup-form').reset(); // Clear the form
             window.location.href = 'Home.html';
         })
         .catch(error => {
@@ -73,6 +75,7 @@ function sendSignupData() {
             alert('Signup failed. Please try again.'); // Alert the user about the error
         });
 }
+
 
 // Event listener for SignUp form submission
 document.getElementById('Signup-form').addEventListener('submit', handleSignupFormSubmit);

@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-function handleBookAdd(event){
+function handleBookAdd(event) {
     event.preventDefault();
 
     var title = document.getElementById('title').value;
@@ -47,7 +47,29 @@ function handleBookAdd(event){
     var summary = document.getElementById('summary').value;
     var total_page = document.getElementById('totalPage').value;
     var image_link = document.getElementById('imageLink').value;
+    console.log(title, category, author, quantity, available, summary, total_page, image_link)
+
+    axios.post('http://localhost:3000/admin/addbook', {
+        title: title,
+        category: category,
+        author: author,
+        quantity: parseInt(quantity),
+        available: parseInt(available),
+        summary: summary,
+        total_page: parseInt(total_page),
+        image_link: image_link
+    })
+        .then(response => {
+            // Handle successful response
+            console.log('Book Add Successful:', response.data); // Log the successful response data
+            document.getElementById('addBookForm').reset(); // Clear the form
+        })
+        .catch(error => {
+            // Handle error
+            console.error(error); // Log any errors to the console
+            alert('Book Add Failed. Please try again.'); // Alert the user about the error
+        });
 }
 
 // Event listener for SignUp form submission
-document.getElementById('Signup-form').addEventListener('submit', handleBookAdd);
+document.getElementById('addBookForm').addEventListener('submit', handleBookAdd);
