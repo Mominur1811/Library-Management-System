@@ -7,10 +7,17 @@ import (
 	sq "github.com/Masterminds/squirrel"
 )
 
-type Reader struct {
-	Name     string `db:"name"     validate:"required,alpha"          json:"name" `
+type LoginReaderCredintials struct {
 	Email    string `db:"email"    validate:"required,email"          json:"email"`
 	Password string `db:"password" validate:"required"                json:"password"`
+}
+
+type Reader struct {
+	Id        *int
+	Name      string `db:"name"     validate:"required,alpha"          json:"name" `
+	Email     string `db:"email"    validate:"required,email"          json:"email"`
+	Password  string `db:"password" validate:"required"                json:"password"`
+	Is_Active *bool
 }
 
 type ReaderRepo struct {

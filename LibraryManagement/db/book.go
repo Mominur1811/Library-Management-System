@@ -12,12 +12,14 @@ import (
 
 type Book struct {
 	Id         int       `json:"id"`
-	Name       string    `db:"book"        validate:"required"   json:"book"`
+	Title      string    `db:"title"       validate:"required"   json:"title"`
 	Category   string    `db:"category"    validate:"required"   json:"category"`
 	Author     string    `db:"author"      validate:"required"   json:"author"`
 	Quantity   int       `db:"quantity"    validate:"required"   json:"quantity"`
 	Available  int       `db:"available"   validate:"required"   json:"available"`
 	Summary    string    `db:"summary"     validate:"required"   json:"summary"`
+	TotalPage  int       `db:"total_page"  validate:"required"   json:"total_page"`
+	ImageLink  string    `db:"image_link"  validate:"required"   json:"image_link"`
 	Created_at time.Time `db:"created_at"`
 }
 
@@ -38,12 +40,14 @@ func GetBookRepo() *BookRepo {
 func (r *BookRepo) InsertBook(book *Book) (*Book, error) {
 
 	column := map[string]interface{}{
-		"book":      book.Name,
-		"category":  book.Category,
-		"author":    book.Author,
-		"quantity":  book.Quantity,
-		"available": book.Available,
-		"summary":   book.Summary,
+		"title":      book.Title,
+		"category":   book.Category,
+		"author":     book.Author,
+		"quantity":   book.Quantity,
+		"available":  book.Available,
+		"summary":    book.Summary,
+		"total_page": book.TotalPage,
+		"image_link": book.ImageLink,
 	}
 
 	var columns []string
@@ -57,12 +61,14 @@ func (r *BookRepo) InsertBook(book *Book) (*Book, error) {
 		Columns(columns...).
 		Suffix(`
 			RETURNING 		
-			book,
+			title,
 			category,
 			author,
 			quantity,
 			available,
-			summary
+			summary,
+			total_page,
+			image_link
 		`).
 		Values(values...).
 		ToSql()
@@ -79,7 +85,7 @@ func (r *BookRepo) InsertBook(book *Book) (*Book, error) {
 	}
 
 	var insBook Book
-	err = GetReadDB().QueryRow(qry, args...).Scan(&insBook.Name, &insBook.Category, &insBook.Author, &insBook.Quantity, &insBook.Available, &insBook.Summary)
+	err = GetReadDB().QueryRow(qry, args...).Scan(&insBook.Title, &insBook.Category, &insBook.Author, &insBook.Quantity, &insBook.Available, &insBook.Summary, &insBook.TotalPage, &insBook.ImageLink)
 	if err != nil {
 		slog.Error(
 			"Failed to execute insert book query",
@@ -99,12 +105,14 @@ func (r *BookRepo) InsertBook(book *Book) (*Book, error) {
 func (r *BookRepo) UpdateBook(uBook *Book) error {
 
 	updateQry, args, err := GetQueryBuilder().Update(r.Table).
-		Set("book", uBook.Name).
+		Set("title", uBook.Title).
 		Set("author", uBook.Author).
 		Set("category", uBook.Category).
 		Set("quantity", uBook.Quantity).
 		Set("available", uBook.Available).
 		Set("summary", uBook.Summary).
+		Set("total_page", uBook.TotalPage).
+		Set("image_link", uBook.ImageLink).
 		Where(sq.Eq{"Id": uBook.Id}).
 		ToSql()
 	if err != nil {
@@ -299,7 +307,7 @@ func (r *BookRepo) BuildFilterQuery(params utils.PaginationParams) sq.SelectBuil
 		likePattern := fmt.Sprintf("%%%s%%", params.Search)
 		query = query.Where(
 			sq.Or{
-				sq.Like{"book": likePattern},
+				sq.Like{"title": likePattern},
 				sq.Like{"author": likePattern},
 			},
 		)
@@ -355,11 +363,47 @@ func (r *BookRepo) BuildCntQuery(params utils.PaginationParams) sq.SelectBuilder
 		likePattern := fmt.Sprintf("%%%s%%", params.Search)
 		query = query.Where(
 			sq.Or{
-				sq.Like{"book": likePattern},
+				sq.Like{"title": likePattern},
 				sq.Like{"author": likePattern},
 			},
 		)
 	}
 
 	return query
+}
+
+func (r *BookRepo) UpdateBookAvailability(bookId int) error {
+
+	updateQry, args, err := GetQueryBuilder().Update(r.Table).
+		Set("available", sq.Expr("available - 1")).
+		Where(sq.Eq{"id": bookId}).
+		ToSql()
+
+	if err != nil {
+		slog.Error(
+			"Failed to create update for book table decrease available field by one",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": updateQry,
+				"args":  args,
+			}),
+		)
+		return err
+	}
+
+	// Execute the update query
+	_, err = GetReadDB().Exec(updateQry, args...)
+	if err != nil {
+		slog.Error(
+			"Failed to update of readers active status",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": updateQry,
+				"args":  args,
+			}),
+		)
+		return err
+	}
+
+	return nil
 }

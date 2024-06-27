@@ -21,7 +21,7 @@ func GetUnapprovedUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.SendData(w, readerList)
+	utils.SendData(w,  readerList)
 
 }
 

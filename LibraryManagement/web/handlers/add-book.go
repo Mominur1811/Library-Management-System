@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"librarymanagement/db"
 	"librarymanagement/logger"
 	"librarymanagement/web/utils"
@@ -19,7 +20,7 @@ func AddBook(w http.ResponseWriter, r *http.Request) {
 		utils.SendError(w, http.StatusPreconditionFailed, err.Error())
 		return
 	}
-
+	fmt.Println(newBook)
 	if err := utils.ValidateStruct(newBook); err != nil {
 		slog.Error("Failed to validate new book data", logger.Extra(map[string]any{
 			"error":   err.Error(),
