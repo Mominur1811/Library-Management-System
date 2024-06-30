@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"librarymanagement/logger"
 	"log/slog"
 
@@ -26,7 +27,7 @@ func GetAdminRepo() *AdminRepo {
 	return adminRepo
 }
 
-func (r *AdminRepo) RegisterUser(newAdmin *Admin) (*Admin, error) {
+func (r *AdminRepo) RegisterAdmin(newAdmin *Admin) (*Admin, error) {
 
 	column := map[string]interface{}{
 		"password": newAdmin.Password,
@@ -60,7 +61,7 @@ func (r *AdminRepo) RegisterUser(newAdmin *Admin) (*Admin, error) {
 		)
 		return nil, err
 	}
-
+	fmt.Println(qry)
 	// Execute the SQL query and get the result
 	var insAdmin Admin
 	err = GetReadDB().QueryRow(qry, args...).Scan(&insAdmin.Password, &insAdmin.Email)

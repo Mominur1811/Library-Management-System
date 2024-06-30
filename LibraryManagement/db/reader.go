@@ -92,9 +92,46 @@ func (r *ReaderRepo) RegisterUser(newReader *Reader) (*Reader, error) {
 
 func (r *ReaderRepo) GetUnapprovedUser() ([]*Reader, error) {
 
-	qry, args, err := GetQueryBuilder().Select("Name", "Email", "Password").
+	qry, args, err := GetQueryBuilder().Select("Id, Name", "Email", "Password").
 		From("reader").
 		Where(sq.Eq{"Is_Active": false}).
+		ToSql()
+
+	if err != nil {
+		slog.Error(
+			"Failed to create Get Unapproved user query",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return nil, err
+	}
+
+	unapprovedReader := []*Reader{}
+	err = GetReadDB().Select(&unapprovedReader, qry, args...)
+	if err != nil {
+		slog.Error(
+			"Failed to Fetch upapproved user",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return nil, err
+	}
+
+	return unapprovedReader, nil
+
+}
+
+func (r *ReaderRepo) GetFetchUser() ([]*Reader, error) {
+
+	qry, args, err := GetQueryBuilder().Select("Id, Name", "Email", "Password").
+		From("reader").
+		Where(sq.Eq{"Is_Active": true}).
 		ToSql()
 
 	if err != nil {

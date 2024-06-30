@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"librarymanagement/config"
 	"librarymanagement/db"
 	"librarymanagement/web"
@@ -30,4 +31,8 @@ func (app *Application) Wait() {
 
 func (app *Application) CleanUp() {
 	db.CloseDB()
+}
+
+func HelloWOrld() {
+	fmt.Println("HihIHIHIHIH")
 }

@@ -28,9 +28,23 @@ func InitRoutes(mux *http.ServeMux, manager *middlewire.Manager) {
 	)
 
 	mux.Handle(
+		"GET /admin/fetchuser",
+		manager.With(
+			http.HandlerFunc(handlers.FetchUser),
+		),
+	)
+
+	mux.Handle(
 		"POST /admin/acceptapproval",
 		manager.With(
 			http.HandlerFunc(handlers.ApprovedUser),
+		),
+	)
+
+	mux.Handle(
+		"POST /admin/addadmin",
+		manager.With(
+			http.HandlerFunc(handlers.AddAdmin),
 		),
 	)
 
