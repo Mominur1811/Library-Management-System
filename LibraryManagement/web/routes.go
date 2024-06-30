@@ -13,6 +13,12 @@ func InitRoutes(mux *http.ServeMux, manager *middlewire.Manager) {
 			http.HandlerFunc(handlers.RegisterReader),
 		),
 	)
+	mux.Handle(
+		"POST /reader/login",
+		manager.With(
+			http.HandlerFunc(handlers.LoginReader),
+		),
+	)
 
 	mux.Handle(
 		"GET /admin/unapproveduser",
@@ -38,7 +44,28 @@ func InitRoutes(mux *http.ServeMux, manager *middlewire.Manager) {
 	mux.Handle(
 		"GET /reader/searchbook",
 		manager.With(
-			http.HandlerFunc(handlers.SearchBook),
+			http.HandlerFunc(handlers.SearchBook), middlewire.Authenticate,
+		),
+	)
+
+	mux.Handle(
+		"POST /reader/bookrequest",
+		manager.With(
+			http.HandlerFunc(handlers.RequestBook),
+		),
+	)
+
+	mux.Handle(
+		"GET /admin/fetchbookrequest",
+		manager.With(
+			http.HandlerFunc(handlers.FetchBookRequest),
+		),
+	)
+
+	mux.Handle(
+		"GET /admin/approvedbookrequest",
+		manager.With(
+			http.HandlerFunc(handlers.ApprovedBookRequest),
 		),
 	)
 

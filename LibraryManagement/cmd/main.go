@@ -1,6 +1,8 @@
 package main
 
-import "librarymanagement/app"
+import (
+	"librarymanagement/app"
+)
 
 func main() {
 
@@ -9,4 +11,5 @@ func main() {
 	app.Run()
 	app.Wait()
 	app.CleanUp()
+
 }

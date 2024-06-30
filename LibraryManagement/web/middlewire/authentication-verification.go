@@ -1,7 +1,6 @@
 package middlewire
 
 import (
-	"context"
 	"fmt"
 	"librarymanagement/config"
 	"librarymanagement/web/utils"
@@ -11,12 +10,12 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-type UserEmail string
+type UserId string
 
-const userEmail = UserEmail("userEmail")
+const userId = UserId("userId")
 
 type AuthClaims struct {
-	Email string `json:"email"`
+	Id int `json:"Id"`
 	jwt.RegisteredClaims
 }
 
@@ -27,55 +26,63 @@ func unauthorizedResponse(w http.ResponseWriter) {
 func Authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		// collect token from header
-		header := r.Header.Get("authorization")
-		tokenStr := ""
-		// collect token from query
-		if len(header) == 0 {
-			tokenStr = r.URL.Query().Get("auth")
-		} else {
-			tokens := strings.Split(header, " ")
-			if len(tokens) != 2 {
-				unauthorizedResponse(w)
-				return
-			}
-			tokenStr = tokens[1]
+		str := r.Header.Get("authorization")
+		tokenStr, err := ExtractToken(str)
+		if err != nil {
+			unauthorizedResponse(w)
+			return
 		}
 
 		// parse jwt
-		var claims = AuthClaims{}
-		fmt.Println(tokenStr, config.GetConfig().JwtSecretKey)
 		token, err := jwt.ParseWithClaims(
 			tokenStr,
-			&claims,
+			&AuthClaims{},
 			func(t *jwt.Token) (interface{}, error) {
 				return []byte(config.GetConfig().JwtSecretKey), nil
 			},
 		)
-		fmt.Println(claims)
-		if err != nil {
-			fmt.Println("Heeloo")
+		if err != nil || !token.Valid {
 			unauthorizedResponse(w)
 			return
 		}
-
-		// get user id from token
-		if !token.Valid {
-			unauthorizedResponse(w)
-			return
-		}
-
-		// set user id in the context
-		wrappedRequest := r.WithContext(context.WithValue(r.Context(), userEmail, claims.Email))
-		next.ServeHTTP(w, wrappedRequest)
+		next.ServeHTTP(w, r)
 	})
 }
 
-func GetUserId(r *http.Request) (int, error) {
-	userIdVal := r.Context().Value(userEmail)
-	userId, ok := userIdVal.(int)
-	if !ok {
-		return 0, fmt.Errorf("Unauthorized")
+func ExtractToken(header string) (string, error) {
+	if len(header) == 0 {
+		return "", fmt.Errorf("access token is null ")
 	}
-	return userId, nil
+
+	//Check and Extract jwt part
+	tokens := strings.Split(header, " ")
+	if len(tokens) != 2 {
+		return "", fmt.Errorf("access token structure is invalid ")
+	}
+	return tokens[1], nil
+
+}
+
+func GetUserId(r *http.Request) (*int, error) {
+
+	str := r.Header.Get("authorization")
+	tokenStr, err := ExtractToken(str)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching jwt token")
+	}
+	
+	var claims AuthClaims
+	// parse jwt
+	_, err = jwt.ParseWithClaims(
+		tokenStr,
+		&claims,
+		func(t *jwt.Token) (interface{}, error) {
+			return []byte(config.GetConfig().JwtSecretKey), nil
+		},
+	)
+	if err != nil {
+		return nil, fmt.Errorf("error claming info from token")
+	}
+
+	return &claims.Id, nil
 }

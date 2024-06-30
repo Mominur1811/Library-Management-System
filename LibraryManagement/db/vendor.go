@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"librarymanagement/logger"
 	"log/slog"
+
+	sq "github.com/Masterminds/squirrel"
 )
 
 type Vendor struct {
@@ -86,4 +88,37 @@ func (r *VendorRepo) NewRegistration(newVendor *Vendor) (*Vendor, error) {
 	}
 
 	return &insertedVendor, nil
+}
+
+func (r *ReaderRepo) CheckLoginData(loginData LoginReaderCredintials) (*Reader, error) {
+
+	qry, args, err := GetQueryBuilder().Select("*").From(`reader`).
+		Where(sq.Eq{"email": loginData.Email, "password": loginData.Password}).ToSql()
+	if err != nil {
+		slog.Error(
+			"Failed to create validate login query",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return nil, err
+	}
+
+	// Execute the query
+	var reader Reader
+	err = GetReadDB().Get(&reader, qry, args...)
+	if err != nil {
+		slog.Error(
+			"Failed to validate login",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return nil, err
+	}
+	return &reader, nil
 }
