@@ -13,6 +13,10 @@ type Admin struct {
 	Password string `json:"password"   validate:"required"        db:"password"`
 }
 
+type SubAdmin struct {
+	Email string `json:"email"  db:"email"`
+}
+
 type AdminRepo struct {
 	Table string
 }
@@ -83,7 +87,7 @@ func (r *AdminRepo) RegisterAdmin(newAdmin *Admin) (*Admin, error) {
 
 func (r *AdminRepo) DeleteAdmin(email string) error {
 
-	qry, args, err := GetQueryBuilder().Delete(r.Table).Where(sq.Eq{"email": email}).ToSql()
+	qry, args, err := GetQueryBuilder().Delete(r.Table).Where(sq.Eq{"email": email}).Where(sq.Eq{"is_superadmin": false}).ToSql()
 	if err != nil {
 		slog.Error(
 			"Failed to create new admin delete query",
@@ -111,4 +115,40 @@ func (r *AdminRepo) DeleteAdmin(email string) error {
 	}
 
 	return nil
+}
+
+func (r *AdminRepo) GetFetchAdmin() ([]*SubAdmin, error) {
+
+	qry, args, err := GetQueryBuilder().Select("email").
+		From(r.Table).
+		Where(sq.Eq{"is_superadmin": false}).
+		ToSql()
+
+	if err != nil {
+		slog.Error(
+			"Failed to create Get sub-admin query",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return nil, err
+	}
+
+	subAdmin := []*SubAdmin{}
+	err = GetReadDB().Select(&subAdmin, qry, args...)
+	if err != nil {
+		slog.Error(
+			"Failed to Fetch upapproved user",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return nil, err
+	}
+
+	return subAdmin, nil
 }
