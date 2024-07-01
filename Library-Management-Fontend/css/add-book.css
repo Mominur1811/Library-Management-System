@@ -14,7 +14,9 @@ body {
 /* Container styles */
 .container {
     max-width: 800px;
-    margin: 20px auto;
+    margin-top: 90px;
+    margin-left: 200px;
+    justify-content: center;
     background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;

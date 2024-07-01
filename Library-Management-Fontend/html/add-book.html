@@ -5,10 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Book Form</title>
-    <link rel="stylesheet" href="/home/mominur/go prog/Library-Management-Fontend/css/add-book.css">
+    <link rel="stylesheet" href="../css/add-book.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="../javascript/nav.js"></script>
 </head>
 
 <body>
+    <div id="navbar-container"></div>
     <div class="container">
         <h2>Add Book</h2>
         <form id="addBookForm">
@@ -75,8 +78,23 @@
             </div>
         </form>
     </div>
+    <script>
+        // Use get_navbar() to insert navbar HTML into #navbar-container
+        document.getElementById('navbar-container').innerHTML = get_navbar();
 
-    <script src="/home/mominur/go prog/Library-Management-Fontend/javascript/add-book.js"></script>
+        // Optionally, add logic to set the active class based on current page
+        const path = window.location.pathname;
+        const links = document.querySelectorAll('.topnav a');
+
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            if (path.endsWith(href)) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+
+    <script src="../javascript/add-book.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 

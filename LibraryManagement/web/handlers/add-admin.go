@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"librarymanagement/db"
 	"librarymanagement/logger"
 	"librarymanagement/web/utils"
@@ -32,8 +33,8 @@ func AddAdmin(w http.ResponseWriter, r *http.Request) {
 
 	var insAdmin *db.Admin
 	var err error
-
-	if insAdmin, err = db.GetAdminRepo().RegisterUser(&newAdmin); err != nil {
+	fmt.Println(newAdmin)
+	if insAdmin, err = db.GetAdminRepo().RegisterAdmin(&newAdmin); err != nil {
 		utils.SendError(w, http.StatusInternalServerError, err.Error())
 		return
 	}

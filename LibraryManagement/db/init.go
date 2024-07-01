@@ -7,4 +7,5 @@ func InitDB() {
 	InitReaderRepo()
 	InitBookRepo()
 	InitBookReqeustRepo()
+	InitAdminRepo()
 }

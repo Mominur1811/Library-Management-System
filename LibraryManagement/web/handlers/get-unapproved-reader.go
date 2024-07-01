@@ -50,4 +50,6 @@ func ApprovedUser(w http.ResponseWriter, r *http.Request) {
 		utils.SendError(w, http.StatusPreconditionFailed, err.Error())
 		return
 	}
+
+	utils.SendData(w, "Succeed")
 }

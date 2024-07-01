@@ -2,7 +2,9 @@ function get_navbar() {
     return `<nav class="topnav">
         <a href="Home.html">Home</a>
         <a href="Signup-Login.html">Signup</a>
-        <a href="#">Contact</a>
+        <a href="admin-login.html">Admin</a>
+        <a href="add-book.html">Add Book</a>
+        <a href="book-request.html">Pending Request</a>
     </nav>
 
     <footer class="bottomnav">
