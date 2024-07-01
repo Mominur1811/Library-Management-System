@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Cards</title>
+    <link rel="stylesheet" href="../css/book-list-borrow-list.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Card 1</h2>
+            <div class="controls">
+                <input type="text" id="searchInput1" placeholder="Search...">
+                <select id="category1">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                </select>
+                <input type="date" id="dateInput1">
+            </div>
+            <table id="table1" class="data-table">
+                <thead>
+                    <tr>
+                        <th>Book Id</th>
+                        <th>Book Title</th>
+                        <th>Borrower</th>
+                        <th>Borrow Date</th>
+                    </tr>
+                </thead>
+                <tbody id="borrowListBody">
+                    <!-- Table rows will be populated dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Card 2</h2>
+            <div class="controls">
+                <input type="text" id="searchInput2" placeholder="Search...">
+                <select id="category2">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                </select>
+                <input type="date" id="dateInput2">
+            </div>
+            <table id="table2" class="data-table">
+                <thead>
+                    <tr>
+                        <th>Book Id</th>
+                        <th>Book Title</th>
+                        <th>Author</th>
+                        <th>Quantity</th>
+                        <th>Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows will be populated dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="../javascript/book-list-borrow-list.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../css/sub-admin.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Admin List</h2>
+            <table id="adminTable">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Table rows will be populated dynamically -->
+                </tbody>
+            </table>
+        </div>
+        <div class="card">
+            <form id="createAdminForm" class="create-admin-form">
+                <h2>Create New Admin</h2>
+                <div class="form-group">
+                    <label for="newEmail">Email</label>
+                    <input type="email" id="newEmail" name="newEmail" placeholder="Enter admin's email" required>
+                    <small class="error-message" id="emailError"></small>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Password</label>
+                    <input type="password" id="newPassword" name="newPassword" placeholder="Enter admin's password"
+                        required>
+                    <small class="error-message" id="passwordError"></small>
+                </div>
+                <button type="submit">Create Admin</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../javascript/sub-admin.js"></script>
+</body>
+
+</html>

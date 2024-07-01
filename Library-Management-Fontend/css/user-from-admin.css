@@ -1,0 +1,91 @@
+/* First card */
+.card#card1 {
+    width: 500px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-left: 100px; /* Adjust left margin as needed */
+    margin-top: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    float: left; /* Float left for side-by-side layout */
+}
+
+.card#card1 h3 {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    margin: 0;
+    text-align: center;
+}
+
+.card#card1 .table-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.card#card1 table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.card#card1 table,
+.card#card1 th,
+.card#card1 td {
+    border: 1px solid #ddd;
+}
+
+.card#card1 th,
+.card#card1 td {
+    padding: 10px;
+    text-align: left;
+}
+
+.card#card1 th {
+    background-color: #f2f2f2;
+}
+
+/* Second Card */
+.card#card2 {
+    width: 500px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-left: 80px; /* Adjust left margin for spacing */
+    margin-top: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    float: left; /* Float left for side-by-side layout */
+}
+
+.card#card2 h3 {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px;
+    margin: 0;
+    text-align: center;
+}
+
+.card#card2 .table-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.card#card2 table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.card#card2 table,
+.card#card2 th,
+.card#card2 td {
+    border: 1px solid #ddd;
+}
+
+.card#card2 th,
+.card#card2 td {
+    padding: 10px;
+    text-align: left;
+}
+
+.card#card2 th {
+    background-color: #f2f2f2;
+}

@@ -7,8 +7,6 @@ const searchResults = document.getElementById('searchResults');
 searchButton.addEventListener('click', filterBooks);
 searchInput.addEventListener('input', filterBooks);
 categoryDropdown.addEventListener('change', filterBooks);
-token = localStorage.getItem('jwt')
-console.log(token)
 // Function to filter books based on search query and category
 async function filterBooks() {
     const searchTerm = searchInput.value.trim().toLowerCase();
@@ -32,12 +30,12 @@ async function filterBooks() {
         if (selectedCategory !== 'all') {
             params.category = selectedCategory;
         }
+
         // Make a GET request using Axios
         const response = await axios.get(apiUrl, {
-            params,
-            header: headers
+            params: params,
+            headers: headers  // Corrected property name to 'headers'
         });
-        console.log(headers)
 
         // Handle successful response
         const items = response.data.data.items; // Extract the 'items' array from the response
@@ -47,6 +45,7 @@ async function filterBooks() {
         console.error('Error fetching data:', error);
         displayError('Failed to fetch books. Please try again.');
     }
+
 }
 
 // Function to display filtered results
@@ -57,6 +56,7 @@ function displayResults(results) {
         searchResults.innerHTML = '<p>No results found.</p>';
         return;
     }
+    console.log(results)
 
     const resultList = document.createElement('ul');
     resultList.classList.add('book-list');
@@ -109,7 +109,7 @@ function displayResults(results) {
             event.preventDefault(); // Prevent default link behavior (optional)
             const confirmation = confirm('Are you sure you want to borrow this book?');
             if (confirmation) {
-                orderPlaced(); // Call your function here
+                orderPlaced(book.id); // Call your function here
             } else {
                 alert('Borrow canceled.');
             }
@@ -130,6 +130,46 @@ function displayError(message) {
     searchResults.innerHTML = `<p>${message}</p>`;
 }
 
-function orderPlaced() {
-    console.log("I am pressed")
+function orderPlaced(bookId) {
+    try {
+        // Define your API endpoint
+        const apiUrl = 'http://localhost:3000/reader/bookrequest';
+
+        // Prepare headers
+        const headers = {
+            'Content-Type': 'application/json',
+            'authorization': localStorage.getItem('jwt'),
+        };
+
+        // Data to send in the POST request
+        const postData = {
+            bookid: parseInt(bookId),
+            readerid: parseInt(0), // Assuming you want to send readerid as integer 0
+            request_status: "pending"
+        };
+
+        // Make a POST request using Axios
+        axios.post(apiUrl, postData, {
+            headers: headers
+        })
+            .then(response => {
+                // Handle successful response
+                console.log('Order Placed Successfully:', response.data); // Log the successful response data
+                alert('Order Placed'); // Alert the user
+                // Reset form if needed
+                // document.getElementById('Signup-form').reset();
+                // Redirect to Home.html
+                window.location.href = 'Home.html';
+            })
+            .catch(error => {
+                // Handle error
+                console.error('Error:', error); // Log any errors to the console
+                alert('Failed to place order. Please try again.'); // Alert the user about the error
+            });
+
+    } catch (error) {
+        // Handle any unexpected errors
+        console.error('Unexpected error occurred:', error);
+        alert('An unexpected error occurred. Please try again.');
+    }
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Requests</title>
+    <link rel="stylesheet" href="../css/book-request.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="../javascript/nav.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="navbar-container"></div>
+    <div class="container" id="requests-container">
+        <!-- Cards will be dynamically added here -->
+    </div>
+
+    <script>
+        // Use get_navbar() to insert navbar HTML into #navbar-container
+        document.getElementById('navbar-container').innerHTML = get_navbar();
+
+        // Optionally, add logic to set the active class based on current page
+        const path = window.location.pathname;
+        const links = document.querySelectorAll('.topnav a');
+
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            if (path.endsWith(href)) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+    <script src="../javascript/book-request.js"></script>
+
+</body>
+
+</html>

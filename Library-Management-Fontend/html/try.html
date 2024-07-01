@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Content Display</title>
+    <style>
+        .card {
+            width: 200px;
+            height: 200px;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .content {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card" onclick="showForm()">
+    <h3>Admin Registration Form</h3>
+    <p>Click to view Admin Registration Form</p>
+</div>
+
+<div class="card" onclick="showTable()">
+    <h3>Data Table</h3>
+    <p>Click to view Data Table</p>
+</div>
+
+<div class="card" onclick="showDefault()">
+    <h3>Default Content</h3>
+    <p>Click to view Default Content</p>
+</div>
+
+<div class="content" id="dynamicContent">
+    <!-- Dynamic content will be displayed here -->
+</div>
+
+<script>
+    function showForm() {
+        document.getElementById('dynamicContent').innerHTML = `
+            <form>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username"><br><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password"><br><br>
+                <input type="submit" value="Submit">
+            </form>
+        `;
+    }
+
+    function showTable() {
+        document.getElementById('dynamicContent').innerHTML = `
+            <table border="1">
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                </tr>
+                <tr>
+                    <td>John</td>
+                    <td>25</td>
+                </tr>
+                <tr>
+                    <td>Jane</td>
+                    <td>30</td>
+                </tr>
+            </table>
+        `;
+    }
+
+    function showDefault() {
+        document.getElementById('dynamicContent').innerHTML = `
+            <p>This is default content.</p>
+        `;
+    }
+</script>
+
+</body>
+</html>
