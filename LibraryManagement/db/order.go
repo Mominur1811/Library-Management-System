@@ -137,6 +137,7 @@ func (r *BookRequestRepo) AcceptRequest(reqId int) error {
 
 	updateQry, args, err := GetQueryBuilder().Update(r.Table).
 		Set("request_status", "Approved").
+		Set("issued_at", time.Now()).
 		Where(sq.Eq{"request_id": reqId}).
 		ToSql()
 	if err != nil {
@@ -166,4 +167,41 @@ func (r *BookRequestRepo) AcceptRequest(reqId int) error {
 	}
 
 	return nil
+}
+
+func (r *BookRequestRepo) GetBorrowedBooks() ([]*Request, error) {
+
+	qry, args, err := GetQueryBuilder().Select("b.title AS book_title", "b.available AS book_available", "r.name AS reader_username", "rq.request_id", "rq.bookid", "rq.readerid", "rq.issued_at", "rq.request_status").
+		From("book_request rq").
+		Join("book b ON rq.bookid = b.id").
+		Join("reader r ON rq.readerid = r.id").
+		Where(sq.Eq{"rq.request_status": "Approved"}).ToSql()
+
+	if err != nil {
+		slog.Error(
+			"Failed to create Get Unapproved request query",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return nil, err
+	}
+
+	borrowedBooks := []*Request{}
+	err = GetReadDB().Select(&borrowedBooks, qry, args...)
+	if err != nil {
+		slog.Error(
+			"Failed to Fetch upapproved user",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return nil, err
+	}
+
+	return borrowedBooks, nil
 }
