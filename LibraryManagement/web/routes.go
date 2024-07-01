@@ -35,6 +35,20 @@ func InitRoutes(mux *http.ServeMux, manager *middlewire.Manager) {
 	)
 
 	mux.Handle(
+		"GET /admin/fetchadmin",
+		manager.With(
+			http.HandlerFunc(handlers.FetchAdmin),
+		),
+	)
+
+	mux.Handle(
+		"DELETE /admin/deleteadmin",
+		manager.With(
+			http.HandlerFunc(handlers.DeleteAdmin),
+		),
+	)
+
+	mux.Handle(
 		"POST /admin/acceptapproval",
 		manager.With(
 			http.HandlerFunc(handlers.ApprovedUser),
@@ -77,7 +91,14 @@ func InitRoutes(mux *http.ServeMux, manager *middlewire.Manager) {
 	)
 
 	mux.Handle(
-		"GET /admin/approvedbookrequest",
+		"GET /admin/borrowedbook",
+		manager.With(
+			http.HandlerFunc(handlers.FetchBorrowedBook),
+		),
+	)
+
+	mux.Handle(
+		"PATCH /admin/approvedbookrequest",
 		manager.With(
 			http.HandlerFunc(handlers.ApprovedBookRequest),
 		),
