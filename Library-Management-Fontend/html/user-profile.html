@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="../css/user-profile.css">
+</head>
+
+<body>
+    <div class="profile-section">
+        <h2>User Profile</h2>
+        <div class="profile-info">
+            <p id="username"><strong>Name:</strong> John Doe</p>
+            <p id="email"><strong>Email:</strong> john.doe@example.com</p>
+            <button id="edit-profile-btn">Edit Profile</button>
+        </div>
+        <div class="history-section">
+            <h3>History</h3>
+            <div class="filters">
+                <input type="text" id="searchInput" placeholder="Search...">
+                <select id="categoryDropdown">
+                    <option value="Default">All</option>
+                    <option value="purchase">Purchase</option>
+                    <option value="login">Login</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+            <table id="history-table">
+                <thead>
+                    <tr>
+                        <th>Book Tile</th>
+                        <th>Reading Track</th>
+                        <th>Book Status</th>
+                        <th>Issued Date</th>
+                        <th>Request Date</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Table rows will be populated dynamically with JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="../javascript/user-profile.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+
+</html>

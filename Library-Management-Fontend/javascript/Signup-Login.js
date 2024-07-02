@@ -34,13 +34,14 @@ function sendLoginData() {
         password: password
     })
         .then(response => {
-            // Handle successful response
-            console.log('Login successful:', response.data); // Log the successful response data
-            localStorage.setItem('jwt', response.data.data)
-            // console.log(localStorage.getItem('jwt'))
+
+            console.log(response.data.data.jwt_token)
+            localStorage.setItem('username', response.data.data.username)
+            localStorage.setItem('email', response.data.data.email)
+            localStorage.setItem('jwt_token', response.data.data.jwt_token)
             alert('Login Data successful!'); // Alert the user
-            //  document.getElementById('Signup-form').reset(); // Clear the form
-            window.location.href = 'Home.html';
+            //document.getElementById('Signup-form').reset(); // Clear the form
+            // window.location.href = 'Home.html';
         })
         .catch(error => {
             // Handle error

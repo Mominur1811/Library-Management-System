@@ -4,7 +4,7 @@ function get_navbar() {
         <a href="Signup-Login.html">Signup</a>
         <a href="admin-login.html">Admin</a>
         <a href="add-book.html">Add Book</a>
-        <a href="book-request.html">Pending Request</a>
+        <a href="user-profile.html">Profile</a>
     </nav>
 
     <footer class="bottomnav">

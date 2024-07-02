@@ -19,8 +19,9 @@ async function filterBooks() {
         // Prepare headers
         const headers = {
             'Content-Type': 'application/json',
-            'authorization': localStorage.getItem('jwt'),
+            'authorization': localStorage.getItem('jwt_token'),
         };
+        console.log(localStorage.getItem('jwt_token'))
 
         // Prepare parameters object
         const params = {};
