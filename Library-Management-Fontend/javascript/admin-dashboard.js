@@ -77,6 +77,21 @@ function ConfirmBorrow(reqId, book_id) {
 
 }
 
+function handleDelete(reqId) {
+
+    axios.patch('http://localhost:3000/admin/rejectborrowreq', {
+        request_id: parseInt(reqId)
+    })
+        .then(function (response) {
+            alert("Borrow Request Rejected Successfully!")
+            // Refresh admin table
+            filterReqBooks()
+        })
+        .catch(function (error) {
+            alert("Error to Execute the Command!")
+        });
+}
+
 browseButton.addEventListener("click", function () {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
@@ -135,6 +150,7 @@ function handleBookAdd(event) {
         .then(response => {
             // Handle successful response
             console.log('Book Add Successful:', response.data); // Log the successful response data
+            alert("Book added successfully!")
             document.getElementById('addBookForm').reset(); // Clear the form
         })
         .catch(error => {
