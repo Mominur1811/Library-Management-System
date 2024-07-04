@@ -35,6 +35,7 @@ func RegisterReader(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newReader.Password = hashPassword(newReader.Password)
+
 	var insertedReader *db.Reader
 	var err error
 

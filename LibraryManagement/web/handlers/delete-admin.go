@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"librarymanagement/db"
 	"librarymanagement/web/utils"
 	"net/http"
@@ -9,9 +8,7 @@ import (
 
 func DeleteAdmin(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("Hello")
 	email := r.URL.Query().Get("email")
-	fmt.Println(email)
 	if email == "" {
 		utils.SendError(w, http.StatusNotAcceptable, "Can not find Email in the url")
 		return
