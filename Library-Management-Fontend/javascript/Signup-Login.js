@@ -37,11 +37,12 @@ function sendLoginData() {
 
             console.log(response.data.data.jwt_token)
             localStorage.setItem('username', response.data.data.username)
+            localStorage.setItem('role', response.data.data.role)
             localStorage.setItem('email', response.data.data.email)
             localStorage.setItem('jwt_token', response.data.data.jwt_token)
             alert('Login Data successful!'); // Alert the user
             //document.getElementById('Signup-form').reset(); // Clear the form
-            // window.location.href = 'Home.html';
+            window.location.href = 'Home.html';
         })
         .catch(error => {
             // Handle error

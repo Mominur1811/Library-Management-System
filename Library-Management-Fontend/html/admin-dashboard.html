@@ -11,9 +11,9 @@
 <body>
     <div class="container">
         <div class="top-cards">
-            <div class="card" onclick="navigateTo('sub-admin.html')" style="background-color: #ffc77d;">
-                <h3>Admin</h3>
-                <p>Click to view, add, remove admin</p>
+            <div class="card" id="sub_admin" onclick="navigateTo('sub-admin.html')" style="background-color: #ffc77d;">
+                <h3>Sub-Admin</h3>
+                <span class="access-info">Only accessed by super admin</span>
             </div>
 
             <div class="card" onclick="navigateTo('user-from-admin.html')" style="background-color: #69F0AE;">
@@ -24,7 +24,7 @@
                 <h3>Book List</h3>
                 <p>Click to books</p>
             </div>
-            <div class="card" onclick="navigateTo('user-from-admin.html')" style="background-color: #7986CB;" >
+            <div class="card" onclick="navigateTo('user-from-admin.html')" style="background-color: #7986CB;">
                 <h3>User</h3>
                 <p>Click to view user and their details</p>
             </div>

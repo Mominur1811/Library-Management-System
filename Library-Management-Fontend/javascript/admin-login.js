@@ -23,12 +23,36 @@ form.addEventListener('submit', function (event) {
         setSuccessFor(password);
     }
 
-    // Dummy check for successful login (replace with your own authentication logic)
-    if (emailValue !== '' && passwordValue !== '') {
-        alert('Login successful!');
-        form.reset(); // Reset form after successful login
-    }
+    validateLogin()
 });
+
+//Function to send signin data to the API
+function validateLogin() {
+
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    console.log(email, password)
+    axios.post('http://localhost:3000/admin/login', {
+        email: email,
+        password: password
+    })
+        .then(response => {
+
+            console.log(response.data.data)
+            localStorage.setItem('username', response.data.data.username)
+            localStorage.setItem('email', response.data.data.email)
+            localStorage.setItem('jwt_token', response.data.data.jwt_token)
+            localStorage.setItem('role', response.data.data.role)
+            alert('Login Data successful!'); // Alert the user
+            //document.getElementById('Signup-form').reset(); // Clear the form
+            window.location.href = 'admin-dashboard.html';
+        })
+        .catch(error => {
+            // Handle error
+            console.error('Error:', error); // Log any errors to the console
+            alert('Login failed. Please try again.'); // Alert the user about the error
+        });
+}
 
 function setErrorFor(input, message) {
     const formGroup = input.parentElement;

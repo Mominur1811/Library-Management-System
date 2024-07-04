@@ -62,16 +62,19 @@ function displayResults(items) {
         const row = document.createElement('tr');
         row.innerHTML = `
                 <td>${item.book_title}</td>
-               
                 <td>
                     <div style="display: flex; align-items: center; justify-content: flex-end;">
                         <span>${roundedPercentage}%</span>
-                        <img src="../image/arrow.png" alt="Accept" style="cursor: pointer; margin-left: 5px;" onclick="handleProgress(${item.RequestId})">
+                        ${item.request_status === 'Rejected' || item.request_status === 'pending' || item.request_status === 'Returned' ? '' : `<img src="../image/arrow.png" alt="Accept" style="cursor: pointer; margin-left: 5px;" onclick="handleProgress(${item.request_id})">`}
                     </div>
                 </td>
-                <td>${item.request_status}</td>
-                <td>${item.issued_at}</td>
-                <td>${item.created_at}</td>
+                <td style="color: ${item.request_status === 'Rejected' ? 'red' : item.request_status === 'pending' ? 'orange' : 'green'};">
+                            ${item.request_status}
+                            ${item.request_status === 'Approved' ? `<button onclick="returnBook(${item.request_id}, '${item.book_id}')">Return</button>` : ''}
+
+                </td>
+                <td>${item.request_status === 'pending' ? 'Not Yet' : item.request_status === 'Rejected' ? '-' : item.request_status === 'Approved' ? formatDate(item.issued_at) : ''}</td>
+                <td>${formatDate(item.created_at)}</td>
             `;
         tableBody.appendChild(row);
     });
@@ -106,4 +109,35 @@ function updateProgress(reqId, page) {
         .catch(function (error) {
             alert("Error to Execute the Command!");
         });
+}
+
+function returnBook(reqId, bookId) {
+    console.log("hihihi")
+    const headers = {
+        'Content-Type': 'application/json',
+        'authorization': localStorage.getItem('jwt_token'),
+    };
+    console.log(reqId, bookId);
+    axios.patch('http://localhost:3000//reader/returnbook', {
+        request_id: parseInt(reqId),
+        book_id: parseInt(bookId)
+    }, {
+        headers: headers  // Pass headers object here
+    })
+        .then(function (response) {
+            alert("Book Returned Successfully!");
+
+            // Refresh history table
+            filterHistory();
+        })
+        .catch(function (error) {
+            alert("Error to Execute the Command!");
+        });
+}
+
+
+
+function formatDate(datetime) {
+    let date = new Date(datetime);
+    return `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
 }

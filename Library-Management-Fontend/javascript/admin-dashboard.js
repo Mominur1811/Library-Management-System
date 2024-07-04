@@ -5,6 +5,15 @@ const browseButton = document.getElementById("imageLink");
 searchInput.addEventListener('input', filterReqBooks);
 categoryDropdown.addEventListener('change', filterReqBooks);
 
+var sAdmin = localStorage.getItem('role');
+if (sAdmin === 'admin') {
+    var subAdminCard = document.getElementById('sub_admin');
+    if (subAdminCard) {
+        subAdminCard.style.pointerEvents = 'none';  // Disable click events
+        subAdminCard.style.opacity = '0.5';         // Reduce opacity to visually indicate disabled state
+    }
+}
+
 function navigateTo(url) {
     window.location.href = url;
 }

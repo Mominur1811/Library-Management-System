@@ -10,7 +10,7 @@
 
 <body>
     <div class="container">
-        <div class="card">
+        <div class="card" id="card1">
             <h2>Card 1</h2>
             <div class="controls">
                 <input type="text" id="searchInput1" placeholder="Search...">
@@ -36,16 +36,15 @@
             </table>
         </div>
 
-        <div class="card">
-            <h2>Card 2</h2>
+        <div class="card" id="card2">
+            <h2>Book List</h2>
             <div class="controls">
                 <input type="text" id="searchInput2" placeholder="Search...">
                 <select id="category2">
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
+                    <option value="all">All</option>
+                    <option value="Fiction">Fiction</option>
+                    <option value="Sci-Fi">Sci-Fi</option>
                 </select>
-                <input type="date" id="dateInput2">
             </div>
             <table id="table2" class="data-table">
                 <thead>
@@ -55,12 +54,21 @@
                         <th>Author</th>
                         <th>Quantity</th>
                         <th>Stock</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="bookListBody">
                     <!-- Table rows will be populated dynamically -->
                 </tbody>
             </table>
+            <div id="pagination_container">
+                <button id="prev_button">Prev</button>
+                <div id="page_info_container">
+                    <p id="page_info">Page No:</p>
+                    <span id="total_pages">10</span>
+                </div>
+                <button id="next_button">Next</button>
+            </div>
         </div>
     </div>
 
