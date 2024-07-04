@@ -198,3 +198,36 @@ func (r *ReaderRepo) ApprovedReader(email string) error {
 
 	return nil
 }
+
+func (r *ReaderRepo) ValidateUserLogin(loginData LoginReaderCredintials) (*Reader, error) {
+
+	qry, args, err := GetQueryBuilder().Select("*").From(`reader`).
+		Where(sq.Eq{"email": loginData.Email, "password": loginData.Password, "is_active": true}).ToSql()
+	if err != nil {
+		slog.Error(
+			"Failed to create validate login query",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return nil, err
+	}
+
+	// Execute the query
+	var reader Reader
+	err = GetReadDB().Get(&reader, qry, args...)
+	if err != nil {
+		slog.Error(
+			"Failed to validate login",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return nil, err
+	}
+	return &reader, nil
+}
