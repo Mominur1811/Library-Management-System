@@ -65,7 +65,6 @@ func (r *AdminRepo) RegisterAdmin(newAdmin *Admin) (*Admin, error) {
 		)
 		return nil, err
 	}
-	fmt.Println(qry)
 	// Execute the SQL query and get the result
 	var insAdmin Admin
 	err = GetReadDB().QueryRow(qry, args...).Scan(&insAdmin.Password, &insAdmin.Email)
@@ -151,4 +150,41 @@ func (r *AdminRepo) GetFetchAdmin() ([]*SubAdmin, error) {
 	}
 
 	return subAdmin, nil
+}
+
+func (r *AdminRepo) ValidateAdminLogin(admin LoginReaderCredintials) (string, error) {
+
+	qry, args, err := GetQueryBuilder().Select("is_superadmin").From(r.Table).
+		Where(sq.Eq{"email": admin.Email, "password": admin.Password}).ToSql()
+	if err != nil {
+		slog.Error(
+			"Failed to create validate login query",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return "", err
+	}
+
+	// Execute the query
+	var role bool
+	err = GetReadDB().Get(&role, qry, args...)
+	if err != nil {
+		slog.Error(
+			"Failed to validate login",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": qry,
+				"args":  args,
+			}),
+		)
+		return "", err
+	}
+	fmt.Println(role)
+	if role {
+		return "super_admin", nil
+	}
+	return "admin", nil
 }

@@ -145,7 +145,7 @@ func (r *BookRepo) UpdateBook(uBook *Book) error {
 
 func (r *BookRepo) DeleteBook(id int) error {
 
-	delQry, args, err := GetQueryBuilder().Delete(r.Table).Where("id", id).ToSql()
+	delQry, args, err := GetQueryBuilder().Delete(r.Table).Where(sq.Eq{"id": id}).ToSql()
 	if err != nil {
 		slog.Error(
 			"Failed to create delete query of book",
@@ -339,7 +339,7 @@ func (r *BookRepo) GetTotal(params utils.PaginationParams) (int, error) {
 	err = GetWriteDB().Get(&totalCount, queryString, args...)
 	if err != nil {
 		slog.Error(
-			"Failed to get audit logs count",
+			"Failed to get book count",
 			logger.Extra(map[string]any{
 				"error": err.Error(),
 			}),
@@ -395,7 +395,42 @@ func (r *BookRepo) UpdateBookAvailability(bookId int) error {
 	_, err = GetReadDB().Exec(updateQry, args...)
 	if err != nil {
 		slog.Error(
-			"Failed to update of readers active status",
+			"Failed to update of book count decrease by one",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": updateQry,
+				"args":  args,
+			}),
+		)
+		return err
+	}
+
+	return nil
+}
+
+func (r *BookRepo) UpdateBookCount(bookId int) error {
+
+	updateQry, args, err := GetQueryBuilder().Update(r.Table).
+		Set("available", sq.Expr("available + 1")).
+		Where(sq.Eq{"id": bookId}).
+		ToSql()
+	if err != nil {
+		slog.Error(
+			"Failed to create update for book table increase available field by one",
+			logger.Extra(map[string]any{
+				"error": err.Error(),
+				"query": updateQry,
+				"args":  args,
+			}),
+		)
+		return err
+	}
+
+	// Execute the update query
+	_, err = GetReadDB().Exec(updateQry, args...)
+	if err != nil {
+		slog.Error(
+			"Failed to update of book count decrease by one",
 			logger.Extra(map[string]any{
 				"error": err.Error(),
 				"query": updateQry,
