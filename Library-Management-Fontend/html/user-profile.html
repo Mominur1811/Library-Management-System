@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <link rel="stylesheet" href="../css/user-profile.css">
+    <script src="../javascript/nav.js"></script>
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 
 <body>
+    <div id="navbar-container"></div>
     <div class="profile-section">
         <h2>User Profile</h2>
         <div class="profile-info">
@@ -21,9 +24,11 @@
             <div class="filters">
                 <input type="text" id="searchInput" placeholder="Search...">
                 <select id="categoryDropdown">
-                    <option value="Default">All</option>
-                    <option value="purchase">Purchase</option>
-                    <option value="login">Login</option>
+                    <option value="all">Default</option>
+                    <option value="Approved">Accepted</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Returned">Returned</option>
+                    <option value="Rejected">Rejected</option>
                     <!-- Add more options as needed -->
                 </select>
             </div>
@@ -43,6 +48,22 @@
             </table>
         </div>
     </div>
+
+    <script>
+        // Use get_navbar() to insert navbar HTML into #navbar-container
+        document.getElementById('navbar-container').innerHTML = get_navbar();
+
+        // Optionally, add logic to set the active class based on current page
+        const path = window.location.pathname;
+        const links = document.querySelectorAll('.topnav a');
+
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            if (path.endsWith(href)) {
+                link.classList.add('active');
+            }
+        });
+    </script>
 
     <script src="../javascript/user-profile.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

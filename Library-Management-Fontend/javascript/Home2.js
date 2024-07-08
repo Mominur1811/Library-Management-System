@@ -8,6 +8,14 @@ searchButton.addEventListener('click', filterBooks);
 searchInput.addEventListener('input', filterBooks);
 categoryDropdown.addEventListener('change', filterBooks);
 // Function to filter books based on search query and category
+
+//Change page
+var pageNum = 1
+const nextButton = document.getElementById('next_button')
+const prevButton = document.getElementById('prev_button')
+nextButton.addEventListener('click', increasePageNum)
+prevButton.addEventListener('click', decreasePageNum)
+
 async function filterBooks() {
     const searchTerm = searchInput.value.trim().toLowerCase();
     const selectedCategory = categoryDropdown.value;
@@ -25,6 +33,8 @@ async function filterBooks() {
 
         // Prepare parameters object
         const params = {};
+        console.log(pageNum)
+        params.pageNumber = pageNum
         if (searchTerm) {
             params.search = searchTerm;
         }
@@ -41,6 +51,7 @@ async function filterBooks() {
         // Handle successful response
         const items = response.data.data.items; // Extract the 'items' array from the response
         displayResults(items);
+        console.log(response.data.data)
     } catch (error) {
         // Handle error
         console.error('Error fetching data:', error);
@@ -69,7 +80,7 @@ function displayResults(results) {
 
         // Image
         const imageElement = document.createElement('img');
-        imageElement.src = '/home/mominur/Downloads/' + book.image; // Assuming 'imagePath' is the property containing the image URL
+        imageElement.src = book.image; // Assuming 'imagePath' is the property containing the image URL
         imageElement.alt = book.title; // Optional: Provide alt text for the image
         imageElement.classList.add('book-image');
         bookCard.appendChild(imageElement);
@@ -139,14 +150,14 @@ function orderPlaced(bookId) {
         // Prepare headers
         const headers = {
             'Content-Type': 'application/json',
-            'authorization': localStorage.getItem('jwt'),
+            'authorization': localStorage.getItem('jwt_token'),
         };
 
         // Data to send in the POST request
         const postData = {
-            bookid: parseInt(bookId),
-            readerid: parseInt(0), // Assuming you want to send readerid as integer 0
-            request_status: "pending"
+            book_id: parseInt(bookId),
+            reader_id: parseInt(0), // Assuming you want to send readerid as integer 0
+            borrow_status: "Pending"
         };
 
         // Make a POST request using Axios
@@ -157,15 +168,13 @@ function orderPlaced(bookId) {
                 // Handle successful response
                 console.log('Order Placed Successfully:', response.data); // Log the successful response data
                 alert('Order Placed'); // Alert the user
-                // Reset form if needed
-                // document.getElementById('Signup-form').reset();
-                // Redirect to Home.html
-                window.location.href = 'Home.html';
+                filterBooks()
             })
             .catch(error => {
                 // Handle error
                 console.error('Error:', error); // Log any errors to the console
                 alert('Failed to place order. Please try again.'); // Alert the user about the error
+                filterBooks()
             });
 
     } catch (error) {
@@ -174,3 +183,16 @@ function orderPlaced(bookId) {
         alert('An unexpected error occurred. Please try again.');
     }
 }
+
+
+function increasePageNum() {
+    console.log("I am increase pressed")
+    pageNum = pageNum + 1;
+    filterBooks()
+}
+
+function decreasePageNum() {
+    pageNum = pageNum - 1;
+    filterBooks()
+}
+

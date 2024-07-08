@@ -148,9 +148,9 @@ func (r *BookRequestRepo) GetUnapprovedRequest() ([]*Request, error) {
 }
 
 func (r *BookRequestRepo) AcceptRequest(reqId int) error {
-
 	updateQry, args, err := GetQueryBuilder().Update("borrow_history").
 		Set("borrow_status", "Approved").
+
 		Set("issued_at", time.Now()).
 		Where(sq.Eq{"request_id": reqId}).
 		ToSql()

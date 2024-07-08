@@ -69,3 +69,52 @@ body {
 .data-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+
+
+
+
+
+
+
+
+#pagination_container {
+    display: flex;
+    justify-content: space-between;
+    /* Distribute items evenly with space between */
+    align-items: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#page_info_container {
+    display: flex;
+    align-items: center;
+    /* Align items vertically */
+}
+
+p#page_info {
+    margin: 0 10px 0 0;
+    /* Right margin added for separation */
+    font-size: 16px;
+    font-weight: bold;
+}
+
+span#total_pages {
+    font-weight: normal;
+}
+
+

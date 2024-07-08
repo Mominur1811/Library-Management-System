@@ -20,9 +20,9 @@ func UserHistory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	historyFilterParam := utils.GetPaginationParams(r, defaultSortBy, defaultSortOrder)
-	historyFilterParam.BorrowerId = *userId
-	history, err := db.GetBookRequestRepo().GetBorrowStatus(historyFilterParam)
+	historyFilterParam := FetchHistoryParam(r)
+
+	history, err := db.GetBookRequestRepo().GetUserHistory(userId, historyFilterParam.SearchVal, historyFilterParam.RequestStatus)
 	if err != nil {
 		utils.SendError(w, http.StatusNotAcceptable, err.Error())
 		return
@@ -30,3 +30,12 @@ func UserHistory(w http.ResponseWriter, r *http.Request) {
 
 	utils.SendData(w, history)
 }
+
+func FetchHistoryParam(r *http.Request) *HistoryFilterParam {
+
+	var temp HistoryFilterParam
+	temp.SearchVal = r.URL.Query().Get("search")
+	temp.RequestStatus = r.URL.Query().Get("category")
+	return &temp
+}
+

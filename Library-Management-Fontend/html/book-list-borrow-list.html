@@ -2,22 +2,88 @@
 <html lang="en">
 
 <head>
+
+    <style>
+        /* Styling for the modal dialog */
+        #editModal {
+            display: none; /* Hidden by default */
+            font-family: Arial, sans-serif;
+        }
+    
+        /* Styling for form fields */
+        #editForm {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        /* Styling for form labels */
+        #editForm label {
+            font-weight: bold;
+        }
+    
+        /* Styling for form inputs and textarea */
+        #editForm input[type="text"],
+        #editForm input[type="number"],
+        #editForm textarea {
+            width: calc(100% - 20px);
+            margin: 8px 0;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+    
+        /* Styling for form buttons */
+        #editForm button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    
+        /* Styling for form buttons on hover */
+        #editForm button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Cards</title>
     <link rel="stylesheet" href="../css/book-list-borrow-list.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <!-- jQuery UI CSS (optional, for styling) -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+
 </head>
 
 <body>
     <div class="container">
-        <div class="card">
-            <h2>Card 1</h2>
+        <div class="card" id="card1">
+            <h2>Borrow Status</h2>
             <div class="controls">
                 <input type="text" id="searchInput1" placeholder="Search...">
                 <select id="category1">
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
+                    <option value="all">Default</option>
+                    <option value="Approved">Accept</option>
+                    <option value="Reject">Reject</option>
+                    <option value="Pending">Pending</option>
                 </select>
                 <input type="date" id="dateInput1">
             </div>
@@ -28,6 +94,7 @@
                         <th>Book Title</th>
                         <th>Borrower</th>
                         <th>Borrow Date</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody id="borrowListBody">
@@ -36,16 +103,15 @@
             </table>
         </div>
 
-        <div class="card">
-            <h2>Card 2</h2>
+        <div class="card" id="card2">
+            <h2>Book List</h2>
             <div class="controls">
                 <input type="text" id="searchInput2" placeholder="Search...">
                 <select id="category2">
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
+                    <option value="all">All</option>
+                    <option value="Fiction">Fiction</option>
+                    <option value="Sci-Fi">Sci-Fi</option>
                 </select>
-                <input type="date" id="dateInput2">
             </div>
             <table id="table2" class="data-table">
                 <thead>
@@ -55,12 +121,21 @@
                         <th>Author</th>
                         <th>Quantity</th>
                         <th>Stock</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="bookListBody">
                     <!-- Table rows will be populated dynamically -->
                 </tbody>
             </table>
+            <div id="pagination_container">
+                <button id="prev_button">Prev</button>
+                <div id="page_info_container">
+                    <p id="page_info">Page No:</p>
+                    <span id="total_pages">10</span>
+                </div>
+                <button id="next_button">Next</button>
+            </div>
         </div>
     </div>
 
