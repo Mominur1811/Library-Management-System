@@ -27,7 +27,7 @@ func LoginReader(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := utils.ValidateStruct(loginReader); err != nil {
-		slog.Error("Failed to validate new user data", logger.Extra(map[string]any{
+		slog.Error("Failed to validate login data", logger.Extra(map[string]any{
 			"error":   err.Error(),
 			"payload": loginReader,
 		}))
@@ -39,31 +39,36 @@ func LoginReader(w http.ResponseWriter, r *http.Request) {
 
 	var reader *db.Reader
 	var err error
-	if reader, err = db.GetReaderRepo().CheckLoginData(loginReader); err != nil {
+	if reader, err = db.GetReaderRepo().ValidateUserLogin(loginReader); err != nil {
 		utils.SendError(w, http.StatusPreconditionFailed, err.Error())
 		return
 	}
 
-	jwtToken, err := createToken(*reader.Id, 50)
+	jwtToken, err := createToken(*reader.Id, 50, "user")
 	if err != nil {
 		slog.Error("Failed to get access token", logger.Extra(map[string]any{
 			"error":     err.Error(),
-			"payload":   reader,
 			"jwt_token": jwtToken,
 		}))
 		utils.SendError(w, http.StatusExpectationFailed, err.Error())
 		return
 	}
-	utils.SendData(w, jwtToken)
+	utils.SendData(w, map[string]interface{}{
+		"username":  reader.Name,
+		"email":     reader.Email,
+		"jwt_token": jwtToken,
+		"role":"user",
+	})
 
 }
 
 // JWT CREATION
-func createToken(userId int, lifeTime int) (string, error) {
+func createToken(userId int, lifeTime int, role string) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		middlewire.AuthClaims{
-			Id: userId,
+			Id:   userId,
+			Role: role,
 			RegisteredClaims: jwt.RegisteredClaims{
 				ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * time.Duration(lifeTime))),
 			},

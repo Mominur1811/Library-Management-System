@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"librarymanagement/db"
 	"librarymanagement/web/utils"
 	"net/http"
@@ -15,8 +14,6 @@ const (
 func SearchBook(w http.ResponseWriter, r *http.Request) {
 
 	param := utils.GetPaginationParams(r, defaultSortBy, defaultSortOrder)
-	header := r.Header.Get("authorization")
-	fmt.Println(header)
 
 	booklist, err := db.GetBookRepo().GetBookList(param)
 	if err != nil {

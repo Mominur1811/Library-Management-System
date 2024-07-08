@@ -9,31 +9,36 @@ import (
 	"net/http"
 )
 
-func AddBook(w http.ResponseWriter, r *http.Request) {
-	var newBook db.Book
-	if err := json.NewDecoder(r.Body).Decode(&newBook); err != nil {
+func AddAdmin(w http.ResponseWriter, r *http.Request) {
+
+	var newAdmin db.Admin
+	if err := json.NewDecoder(r.Body).Decode(&newAdmin); err != nil {
 		slog.Error("Failed to decode new user data", logger.Extra(map[string]any{
 			"error":   err.Error(),
-			"payload": newBook,
+			"payload": newAdmin,
 		}))
 		utils.SendError(w, http.StatusPreconditionFailed, err.Error())
 		return
 	}
-	if err := utils.ValidateStruct(newBook); err != nil {
-		slog.Error("Failed to validate new book data", logger.Extra(map[string]any{
+
+	if err := utils.ValidateStruct(newAdmin); err != nil {
+		slog.Error("Failed to validate new user data", logger.Extra(map[string]any{
 			"error":   err.Error(),
-			"payload": newBook,
+			"payload": newAdmin,
 		}))
 		utils.SendError(w, http.StatusExpectationFailed, err.Error())
 		return
 	}
 
-	var insBook *db.Book
+	newAdmin.Password = hashPassword(newAdmin.Password)
+
+	var insAdmin *db.Admin
 	var err error
-	if insBook, err = db.GetBookRepo().InsertBook(&newBook); err != nil {
+	if insAdmin, err = db.GetAdminRepo().RegisterAdmin(&newAdmin); err != nil {
 		utils.SendError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	utils.SendData(w, insBook)
+	utils.SendData(w, insAdmin)
+
 }
