@@ -155,9 +155,9 @@ function orderPlaced(bookId) {
 
         // Data to send in the POST request
         const postData = {
-            bookid: parseInt(bookId),
-            readerid: parseInt(0), // Assuming you want to send readerid as integer 0
-            request_status: "Pending"
+            book_id: parseInt(bookId),
+            reader_id: parseInt(0), // Assuming you want to send readerid as integer 0
+            borrow_status: "Pending"
         };
 
         // Make a POST request using Axios

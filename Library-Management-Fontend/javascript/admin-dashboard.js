@@ -24,27 +24,46 @@ async function filterReqBooks() {
     const selectedCategory = categoryDropdown.value;
 
     try {
-        const apiUrl = 'http://localhost:3000/admin/fetchbookrequest'; // Replace with your actual API endpoint URL
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-            throw new Error('Failed to fetch data');
+        const apiUrl = 'http://localhost:3000/admin/borrowedbook'; // Replace with your actual API endpoint URL
+
+        // Prepare headers
+        const headers = {
+            'Content-Type': 'application/json',
+            'authorization': localStorage.getItem('jwt_token'),
+        };
+
+        // Prepare parameters object
+        const params = {};
+        if (searchTerm) {
+            params.search = searchTerm;
         }
-        const data = await response.json();
+        if (selectedCategory != 'all') {
+            params.category = selectedCategory
+        }
+        params.borrowStatus = "Pending";
+        // Make a GET request using Axios
+        const response = await axios.get(apiUrl, {
+            params: params,
+            // headers: headers  // Corrected property name to 'headers'
+        });
+
+        // Handle successful response
+        const items = response.data.data.items // Extract the 'items' array from the response
 
         const tableBody = document.getElementById('req_tbody');
         // Clear existing table rows
         tableBody.innerHTML = '';
-        console.log(data.data)
-        data.data.forEach(item => {
+        console.log(items)
+        items.forEach(item => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${item.book_id}</td>
                 <td>${item.book_title}</td>
-                <td>${item.reader_name}</td>
+                <td>${item.borrower_name}</td>
                 <td>${item.book_available}</td>
                 <td>
-                    <img src="../image/accept.png" alt="Accept" onclick="handleAccept(${item.RequestId}, ${item.book_id})">
-                    <img src="../image/delete.png" alt="Delete" onclick="handleDelete(${item.RequestId})">
+                    <img src="../image/accept.png" alt="Accept" onclick="handleAccept(${item.request_id}, ${item.book_id})">
+                    <img src="../image/delete.png" alt="Delete" onclick="handleDelete(${item.request_id})">
                 </td>
             `;
             tableBody.appendChild(row);

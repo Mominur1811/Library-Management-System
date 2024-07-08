@@ -30,7 +30,7 @@ async function filterHistory() {
             params.search = searchTerm;
         }
         if (selectedCategory !== 'all') {
-            params.category = selectedCategory;
+            params.borrowStatus = selectedCategory;
         }
 
         // Make a GET request using Axios
@@ -40,8 +40,8 @@ async function filterHistory() {
         });
 
         // Handle successful response
-        const items = response.data.data // Extract the 'items' array from the response
-        console.log(response.data.data)
+        const items = response.data.data.items // Extract the 'items' array from the response
+        console.log(items)
         displayResults(items);
     } catch (error) {
         // Handle error
@@ -65,15 +65,15 @@ function displayResults(items) {
                 <td>
                     <div style="display: flex; align-items: center; justify-content: flex-end;">
                         <span>${roundedPercentage}%</span>
-                        ${item.request_status === 'Rejected' || item.request_status === 'pending' || item.request_status === 'Returned' ? '' : `<img src="../image/arrow.png" alt="Accept" style="cursor: pointer; margin-left: 5px;" onclick="handleProgress(${item.request_id})">`}
+                        ${item.borrow_status === 'Rejected' || item.borrow_status === 'Pending' || item.borrow_status === 'Returned' ? '' : `<img src="../image/arrow.png" alt="Accept" style="cursor: pointer; margin-left: 5px;" onclick="handleProgress(${item.request_id})">`}
                     </div>
                 </td>
-                <td style="color: ${item.request_status === 'Rejected' ? 'red' : item.request_status === 'pending' ? 'orange' : 'green'};">
-                            ${item.request_status}
-                            ${item.request_status === 'Approved' ? `<button onclick="returnBook(${item.request_id}, '${item.book_id}')">Return</button>` : ''}
+                <td style="color: ${item.borrow_status === 'Rejected' ? 'red' : item.borrow_status === 'Pending' ? 'orange' : 'green'};">
+                            ${item.borrow_status}
+                            ${item.borrow_status === 'Approved' ? `<button onclick="returnBook(${item.request_id}, '${item.book_id}')">Return</button>` : ''}
 
                 </td>
-                <td>${item.request_status === 'pending' ? 'Not Yet' : item.request_status === 'Rejected' ? '-' : item.request_status === 'Approved' ? formatDate(item.issued_at) : ''}</td>
+                <td>${item.borrow_status === 'Pending' ? 'Not Yet' : item.borrow_status === 'Rejected' ? '-' : item.borrow_status === 'Approved' ? formatDate(item.issued_at) : ''}</td>
                 <td>${formatDate(item.created_at)}</td>
             `;
         tableBody.appendChild(row);

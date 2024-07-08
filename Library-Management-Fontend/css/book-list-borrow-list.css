@@ -79,7 +79,8 @@ body {
 
 #pagination_container {
     display: flex;
-    justify-content: space-between; /* Distribute items evenly with space between */
+    justify-content: space-between;
+    /* Distribute items evenly with space between */
     align-items: center;
     margin-top: 20px;
 }
@@ -101,11 +102,13 @@ button:hover {
 
 #page_info_container {
     display: flex;
-    align-items: center; /* Align items vertically */
+    align-items: center;
+    /* Align items vertically */
 }
 
 p#page_info {
-    margin: 0 10px 0 0; /* Right margin added for separation */
+    margin: 0 10px 0 0;
+    /* Right margin added for separation */
     font-size: 16px;
     font-weight: bold;
 }
@@ -113,4 +116,5 @@ p#page_info {
 span#total_pages {
     font-weight: normal;
 }
+
 

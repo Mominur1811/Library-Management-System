@@ -6,133 +6,140 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="../css/admin-dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
-    <div class="container">
-        <div class="top-cards">
-            <div class="card" id="sub_admin" onclick="navigateTo('sub-admin.html')" style="background-color: #ffc77d;">
-                <h3>Sub-Admin</h3>
-                <span class="access-info">Only accessed by super admin</span>
-            </div>
-
-            <div class="card" onclick="navigateTo('user-from-admin.html')" style="background-color: #69F0AE;">
-                <h3>Handle User</h3>
-                <p>Click to view curren user, pending signup request</p>
-            </div>
-            <div class="card" onclick="navigateTo('book-list-borrow-list.html')" style="background-color: #4FC3F7;">
-                <h3>Book List</h3>
-                <p>Click to books</p>
-            </div>
-            <div class="card" onclick="navigateTo('user-from-admin.html')" style="background-color: #7986CB;">
-                <h3>User</h3>
-                <p>Click to view user and their details</p>
-            </div>
-            <div class="card" onclick="navigateTo('page4.html')" style="background-color: #4CAF50;">
-                <h3>User</h3>
-                <p>Click to view user and their details</p>
-            </div>
-        </div>
-
-        <div class="middle-section">
-            <div class="left-card">
-                <div class="search-container">
-                    <input type="text" id="req_book_name" placeholder="Search...">
-                    <select id="req_category">
-                        <option value="all">All Categories</option>
-                        <option value="Fiction">Fiction</option>
-                        <option value="non-fiction">Non-Fiction</option>
-                        <option value="science">Science</option>
-                        <option value="history">History</option>
-                        <!-- Add more options as needed -->
-                    </select>
+    <div style="display: flex; ">
+        <iframe src="side-nav.html" style="border:none; width:250px; height: 1000px;"></iframe>
+        <div class="container">
+            <div class="top-cards">
+                <div class="card" id="sub_admin" onclick="navigateTo('sub-admin.html')"
+                    style="background-color: #ffc77d;">
+                    <h3>Sub-Admin</h3>
+                    <span class="access-info">Only accessed by super admin</span>
                 </div>
-                <table class="data-table" id="req_book">
-                    <thead>
-                        <tr>
-                            <th id="req_book_id"> BOOK ID</th>
-                            <th id="req_book_title">TITLE</th>
-                            <th id="req_user">USERNAME</th>
-                            <th id="req_book_available">AVAILABLE</th>
-                            <th id="req_action">ACTION</th>
-                            <!-- Will show two image buttion accept.png and delete.png -->
-                        </tr>
-                    </thead>
-                    <tbody id="req_tbody"></tbody>
-                </table>
+
+                <div class="card" onclick="navigateTo('user-from-admin.html')" style="background-color: #69F0AE;">
+                    <h3>Handle User</h3>
+                    <p>Click to view curren user, pending signup request</p>
+                </div>
+                <div class="card" onclick="navigateTo('book-list-borrow-list.html')" style="background-color: #4FC3F7;">
+                    <h3>Book List</h3>
+                    <p>Click to books</p>
+                </div>
+                <div class="card" onclick="navigateTo('user-from-admin.html')" style="background-color: #7986CB;">
+                    <h3>User</h3>
+                    <p>Click to view user and their details</p>
+                </div>
+                <div class="card" onclick="navigateTo('page4.html')" style="background-color: #4CAF50;">
+                    <h3>User</h3>
+                    <p>Click to view user and their details</p>
+                </div>
             </div>
 
+            <div class="middle-section">
+                <div class="left-card">
+                    <div class="search-container">
+                        <input type="text" id="req_book_name" placeholder="Search...">
+                        <select id="req_category">
+                            <option value="all">All Categories</option>
+                            <option value="Fiction">Fiction</option>
+                            <option value="non-fiction">Non-Fiction</option>
+                            <option value="science">Science</option>
+                            <option value="history">History</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </div>
+                    <table class="data-table" id="req_book">
+                        <thead>
+                            <tr>
+                                <th id="req_book_id"> BOOK ID</th>
+                                <th id="req_book_title">TITLE</th>
+                                <th id="req_user">USERNAME</th>
+                                <th id="req_book_available">AVAILABLE</th>
+                                <th id="req_action">ACTION</th>
+                                <!-- Will show two image buttion accept.png and delete.png -->
+                            </tr>
+                        </thead>
+                        <tbody id="req_tbody"></tbody>
+                    </table>
+                </div>
 
-            <div class="right-card">
-                <h2>Add Book</h2>
-                <form id="addBookForm">
-                    <div class="row">
-                        <div class="col">
-                            <label for="title">Book Title</label>
-                            <input type="text" id="title" name="title" required>
+
+                <div class="right-card">
+                    <h2>Add Book</h2>
+                    <form id="addBookForm">
+                        <div class="row">
+                            <div class="col">
+                                <label for="title">Book Title</label>
+                                <input type="text" id="title" name="title" required>
+                            </div>
+                            <div class="col">
+                                <label for="category">Category</label>
+                                <select id="category" name="category" required>
+                                    <option value="" selected disabled>Select Category</option>
+                                    <option value="Fiction">Fiction</option>
+                                    <option value="Non-fiction">Non-fiction</option>
+                                    <option value="Science Fiction">Science Fiction</option>
+                                    <option value="Fantasy">Fantasy</option>
+                                    <option value="Mystery">Mystery</option>
+                                    <option value="Romance">Romance</option>
+                                    <option value="Thriller">Thriller</option>
+                                    <option value="Biography">Biography</option>
+                                    <option value="Self-help">Self-help</option>
+                                    <option value="History">History</option>
+                                    <!-- Add more categories as needed -->
+                                </select>
+                            </div>
                         </div>
-                        <div class="col">
-                            <label for="category">Category</label>
-                            <select id="category" name="category" required>
-                                <option value="" selected disabled>Select Category</option>
-                                <option value="Fiction">Fiction</option>
-                                <option value="Non-fiction">Non-fiction</option>
-                                <option value="Science Fiction">Science Fiction</option>
-                                <option value="Fantasy">Fantasy</option>
-                                <option value="Mystery">Mystery</option>
-                                <option value="Romance">Romance</option>
-                                <option value="Thriller">Thriller</option>
-                                <option value="Biography">Biography</option>
-                                <option value="Self-help">Self-help</option>
-                                <option value="History">History</option>
-                                <!-- Add more categories as needed -->
-                            </select>
+                        <div class="row">
+                            <div class="col">
+                                <label for="author">Author</label>
+                                <input type="text" id="author" name="author" required>
+                            </div>
+                            <div class="col">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" id="quantity" name="quantity" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <label for="author">Author</label>
-                            <input type="text" id="author" name="author" required>
+                        <div class="row">
+                            <div class="col">
+                                <label for="available">Available</label>
+                                <input type="number" id="available" name="available" required>
+                            </div>
+                            <div class="col">
+                                <label for="totalPage">Total Pages</label>
+                                <input type="number" id="totalPage" name="totalPage" required>
+                            </div>
                         </div>
-                        <div class="col">
-                            <label for="quantity">Quantity</label>
-                            <input type="number" id="quantity" name="quantity" required>
+                        <div class="row">
+                            <div class="col">
+                                <label for="imageLink">Image Link</label>
+                                <input type="text" id="imageLink" name="imageLink" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <label for="available">Available</label>
-                            <input type="number" id="available" name="available" required>
+                        <div class="row">
+                            <div class="col full-width">
+                                <label for="summary">Summary</label>
+                                <textarea id="summary" name="summary" rows="4" required></textarea>
+                            </div>
                         </div>
-                        <div class="col">
-                            <label for="totalPage">Total Pages</label>
-                            <input type="number" id="totalPage" name="totalPage" required>
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" id="submit">Add Book</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <label for="imageLink">Image Link</label>
-                            <input type="text" id="imageLink" name="imageLink" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col full-width">
-                            <label for="summary">Summary</label>
-                            <textarea id="summary" name="summary" rows="4" required></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <button type="submit" id="submit">Add Book</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
+
     <script src="../javascript/admin-dashboard.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="include-sidebar.js"></script>
 </body>
 
 </html>
