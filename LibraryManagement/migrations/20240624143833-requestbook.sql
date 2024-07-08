@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS book_request (
     Readerid INT,
     Issued_at TIMESTAMP,
     Request_status VARCHAR,
+    read_page INT DEFAULT 0,
     Created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

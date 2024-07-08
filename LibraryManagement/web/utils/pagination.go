@@ -8,22 +8,28 @@ import (
 )
 
 type PaginationParams struct {
-	Page      int
-	Limit     int
-	Search    string
-	SortBy    string
-	SortOrder string
-	Category  string
+	Page       int
+	Limit      int
+	Search     string
+	SortBy     string
+	SortOrder  string
+	Category   string
+	BorrowerId int
+	BorrowType string
+	BorrowDate string
 }
 
 const (
-	maxLimit     = 100.0
-	pageKey      = "pageNumber"
-	limitKey     = "itemsPerPage"
-	searchKey    = "search"
-	sortByKey    = "sortBy"
-	sortOrderKey = "sortOrder"
-	categoryKey  = "category"
+	maxLimit      = 100.0
+	pageKey       = "pageNumber"
+	limitKey      = "itemsPerPage"
+	searchKey     = "search"
+	sortByKey     = "sortBy"
+	sortOrderKey  = "sortOrder"
+	categoryKey   = "category"
+	borrowerId    = "readerId"
+	borrowTypeKey = "borrowStatus"
+	borrowDateKey = "borrowDate"
 )
 
 func parsePage(r *http.Request) int {
@@ -36,6 +42,13 @@ func parsePage(r *http.Request) int {
 func parseLimit(r *http.Request) int {
 	limitStr := r.URL.Query().Get(limitKey)
 	limit, _ := strconv.ParseInt(limitStr, 10, 32)
+	limit = int64(math.Max(1.0, math.Min(maxLimit, float64(limit))))
+	return int(limit)
+}
+
+func parseBorrowerId(r *http.Request) int {
+	limitStr := r.URL.Query().Get(borrowerId)
+	limit, _ := strconv.ParseInt(limitStr, 10, 32)
 	limit = int64(math.Max(0.0, math.Min(maxLimit, float64(limit))))
 	return int(limit)
 }
@@ -46,12 +59,15 @@ func CountTotalPages(limit, totalItems int) int {
 
 func GetPaginationParams(r *http.Request, defaultSortBy, defaultSortOrder string) PaginationParams {
 	params := PaginationParams{
-		Page:      1,
-		Limit:     10,
-		Search:    "",
-		SortBy:    defaultSortBy,
-		SortOrder: defaultSortOrder,
-		Category:  "",
+		Page:       1,
+		Limit:      6,
+		Search:     "",
+		SortBy:     defaultSortBy,
+		SortOrder:  defaultSortOrder,
+		Category:   "",
+		BorrowerId: -1,
+		BorrowType: "",
+		BorrowDate: "",
 	}
 
 	for k := range r.URL.Query() {
@@ -77,9 +93,22 @@ func GetPaginationParams(r *http.Request, defaultSortBy, defaultSortOrder string
 			params.SortOrder = r.URL.Query().Get(sortOrderKey)
 
 		case categoryKey:
-			// any other filter parameter
+			// category type
 			params.Category = r.URL.Query().Get(categoryKey)
+
+		case borrowerId:
+			// category type
+			params.BorrowerId = parseBorrowerId(r)
+
+		case borrowTypeKey:
+			//borrow status type
+			params.BorrowType = r.URL.Query().Get(borrowTypeKey)
+
+		case borrowDateKey:
+			//borrow date
+			params.BorrowDate = r.URL.Query().Get(borrowDateKey)
 		}
+
 	}
 
 	return params

@@ -38,3 +38,4 @@ func FetchHistoryParam(r *http.Request) *HistoryFilterParam {
 	temp.RequestStatus = r.URL.Query().Get("category")
 	return &temp
 }
+

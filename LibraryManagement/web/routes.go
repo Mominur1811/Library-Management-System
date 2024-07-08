@@ -56,6 +56,13 @@ func InitRoutes(mux *http.ServeMux, manager *middlewire.Manager) {
 	)
 
 	mux.Handle(
+		"POST /admin/login",
+		manager.With(
+			http.HandlerFunc(handlers.LoginAdmin),
+		),
+	)
+
+	mux.Handle(
 		"POST /admin/addadmin",
 		manager.With(
 			http.HandlerFunc(handlers.AddAdmin),
@@ -70,30 +77,44 @@ func InitRoutes(mux *http.ServeMux, manager *middlewire.Manager) {
 	)
 
 	mux.Handle(
+		"PUT /admin/updatebook/{id}",
+		manager.With(
+			http.HandlerFunc(handlers.UpdateBook),
+		),
+	)
+
+	mux.Handle(
+		"DELETE /admin/deletebook",
+		manager.With(
+			http.HandlerFunc(handlers.DeleteBook),
+		),
+	)
+
+	mux.Handle(
 		"GET /reader/searchbook",
 		manager.With(
-			http.HandlerFunc(handlers.SearchBook), middlewire.Authenticate,
+			http.HandlerFunc(handlers.SearchBook), middlewire.AuthenticateUser,
+		),
+	)
+
+	mux.Handle(
+		"GET /admin/searchbook",
+		manager.With(
+			http.HandlerFunc(handlers.SearchBook), middlewire.AuthenticateAdmin,
 		),
 	)
 
 	mux.Handle(
 		"POST /reader/bookrequest",
 		manager.With(
-			http.HandlerFunc(handlers.RequestBook),
-		),
-	)
-
-	mux.Handle(
-		"GET /admin/fetchbookrequest",
-		manager.With(
-			http.HandlerFunc(handlers.FetchBookRequest),
+			http.HandlerFunc(handlers.BorrowRequestBook),
 		),
 	)
 
 	mux.Handle(
 		"GET /admin/borrowedbook",
 		manager.With(
-			http.HandlerFunc(handlers.FetchBorrowedBook),
+			http.HandlerFunc(handlers.FetchBorrowStatus), ///checking this now
 		),
 	)
 
@@ -104,4 +125,31 @@ func InitRoutes(mux *http.ServeMux, manager *middlewire.Manager) {
 		),
 	)
 
+	mux.Handle(
+		"PATCH /admin/rejectborrowreq",
+		manager.With(
+			http.HandlerFunc(handlers.RejectRequest),
+		),
+	)
+
+	mux.Handle(
+		"GET /reader/history",
+		manager.With(
+			http.HandlerFunc(handlers.UserHistory), middlewire.AuthenticateUser,
+		),
+	)
+
+	mux.Handle(
+		"PATCH /reader/updatereadprogress",
+		manager.With(
+			http.HandlerFunc(handlers.UserReadProgressUpdate), middlewire.AuthenticateUser,
+		),
+	)
+
+	mux.Handle(
+		"PATCH /reader/returnbook",
+		manager.With(
+			http.HandlerFunc(handlers.ReturnBook), middlewire.AuthenticateUser,
+		),
+	)
 }

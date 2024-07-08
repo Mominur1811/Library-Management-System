@@ -38,7 +38,7 @@ type UserBookHistory struct {
 	Total_page    int        `db:"total_page"       json:"total_page"`
 	RequestStatus string     `db:"request_status"   json:"request_status"`
 	IssuedAt      *time.Time `db:"issued_at"        json:"issued_at"`
-	Request_dat   *time.Time `db:"created_at"       json:"created_at"`
+	Request_date  *time.Time `db:"created_at"       json:"created_at"`
 }
 
 type BookRequestRepo struct {
@@ -148,9 +148,9 @@ func (r *BookRequestRepo) GetUnapprovedRequest() ([]*Request, error) {
 }
 
 func (r *BookRequestRepo) AcceptRequest(reqId int) error {
+	updateQry, args, err := GetQueryBuilder().Update("borrow_history").
+		Set("borrow_status", "Approved").
 
-	updateQry, args, err := GetQueryBuilder().Update(r.Table).
-		Set("request_status", "Approved").
 		Set("issued_at", time.Now()).
 		Where(sq.Eq{"request_id": reqId}).
 		ToSql()
