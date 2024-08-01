@@ -1,0 +1,14 @@
+{
+    "mode": "update",
+    "service_name": "notification",
+    "http_port": 3001,
+    "jwt_secrect_key": "mominday",
+    "db": {
+        "host": "localhost",
+        "port": "5432",
+        "dbName": "NotificationManagement",
+        "sslMode": "disable",
+        "password": "admin",
+        "user": "root"
+    }
+}
